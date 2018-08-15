@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<company>
+  <empleado>
+    <nombre>gab</nombre>
+    <Dreccion>cra98</Dreccion>
+    <Edad>19</Edad>
+    <Codigo>2166627</Codigo>
+    <Departamento>cai</Departamento>
+  </empleado>
+  <empleado>
+    <nombre>anthony.jpg</nombre>
+    <Dreccion>cra20</Dreccion>
+    <Edad>17</Edad>
+    <Codigo>2166923</Codigo>
+    <Departamento>pm</Departamento>
+  </empleado>
+</company>

@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  *
@@ -70,7 +72,7 @@ public class Empleado extends Persona {
 
     @Override
     public String toString() {
-        return  super.toString() + "," + codigoEmpleado + "," + departamento ;
+        return super.toString() + "," + codigoEmpleado + "," + departamento;
     }
 
     public boolean guardarEmpleados(LinkedList<Empleado> listaEmpleados) {
@@ -102,16 +104,15 @@ public class Empleado extends Persona {
         return g;
 
     }
-    public LinkedList<Empleado> recuperarDeArchivo() 
-            
-    {
-       LinkedList<Empleado> losEmpleado=  new LinkedList<>();
-        try { 
 
-            String Archivo = "Empleados.txt";                
- 
-            BufferedReader  input  =  new  BufferedReader( 
-                new  FileReader(Archivo) ) ;
+    public LinkedList<Empleado> recuperarDeArchivo() {
+        LinkedList<Empleado> losEmpleado = new LinkedList<>();
+        try {
+
+            String Archivo = "Empleados.txt";
+
+            BufferedReader input = new BufferedReader(
+                    new FileReader(Archivo));
             String[] datos;
             String linea;
             int laEdad;
@@ -119,9 +120,8 @@ public class Empleado extends Persona {
             String direccion;
             String Departamento;
             String codigo;
-            
-            while( ( linea = input.readLine() ) != null )
-            {
+
+            while ((linea = input.readLine()) != null) {
                 // Separa cada dato de la cadena leida, usando el formato utilizado al guardar
                 datos = linea.split(",");
                 nombre = datos[0];
@@ -132,75 +132,79 @@ public class Empleado extends Persona {
                 losEmpleado.add(new Empleado(codigo, Departamento, nombre, direccion, laEdad));
             }
             input.close();
-                                                      
-       } catch( java.io.IOException  e ) { 
-           // Se ´puede personalizar el mensaje de error           
-           e.printStackTrace() ; 
-       }
+
+        } catch (java.io.IOException e) {
+            // Se ´puede personalizar el mensaje de error           
+            e.printStackTrace();
+        }
         return losEmpleado;
     }
 
     public String buscarEmpleados(String codigoB) {
-     String ans ="";
-     LinkedList<Empleado> losEmpleaditos= recuperarDeArchivo();
+        String ans = "";
+        LinkedList<Empleado> losEmpleaditos = recuperarDeArchivo();
         for (int i = 0; i < losEmpleaditos.size(); i++) {
-            if(losEmpleaditos.get(i).getCodigoEmpleado().equals(codigoB)){
-            ans+= losEmpleaditos.get(i).getNombre() + "\n"+ 
-                    losEmpleaditos.get(i).getDireccion()+"\n"+
-                    losEmpleaditos.get(i).getEdad()+"\n"+
-                    losEmpleaditos.get(i).getCodigoEmpleado()+"\n"+
-                    losEmpleaditos.get(i).getDepartamento()+"\n";
-            
-            
+            if (losEmpleaditos.get(i).getCodigoEmpleado().equals(codigoB)) {
+                ans += losEmpleaditos.get(i).getNombre() + "\n"
+                        + losEmpleaditos.get(i).getDireccion() + "\n"
+                        + losEmpleaditos.get(i).getEdad() + "\n"
+                        + losEmpleaditos.get(i).getCodigoEmpleado() + "\n"
+                        + losEmpleaditos.get(i).getDepartamento() + "\n";
+
             }
-            
+
         }
-     return ans;
+        return ans;
     }
 
     public LinkedList<Empleado> ordenarEmpleados(LinkedList<Empleado> ListaEmpleado) {
-          
-         ListaEmpleado= recuperarDeArchivo();
+
+        ListaEmpleado = recuperarDeArchivo();
 //         for (int i = 0; i < ListaTemporal.size(); i++) {
 //            ListaEmpleado.set(i, ListaTemporal.get(i).getNombre());
 //        }
-       for (int i = 0; i < ListaEmpleado.size(); i++) {
-            for (int j = 0; j < ListaEmpleado.size()-1; j++) {
-                if(ListaEmpleado.get(j).getNombre().compareTo(ListaEmpleado.get(j+1).getNombre())>0){
-                   Empleado aux = new Empleado();
-                    aux=ListaEmpleado.get(j);
-                    ListaEmpleado.set(j, ListaEmpleado.get(j+1));
-                    ListaEmpleado.set(j+1, aux);
-                    
-                
-                
-              
+        for (int i = 0; i < ListaEmpleado.size(); i++) {
+            for (int j = 0; j < ListaEmpleado.size() - 1; j++) {
+                if (ListaEmpleado.get(j).getNombre().compareTo(ListaEmpleado.get(j + 1).getNombre()) > 0) {
+                    Empleado aux = new Empleado();
+                    aux = ListaEmpleado.get(j);
+                    ListaEmpleado.set(j, ListaEmpleado.get(j + 1));
+                    ListaEmpleado.set(j + 1, aux);
+
+                }
             }
-      }
 
+        }
 
-       } 
-        
         return ListaEmpleado;
     }
 
     public boolean crearFileXML(LinkedList<Empleado> listaEmpleado) {
+        boolean g = false;
         try {
             Element company = new Element("company");
-            Document doc= new Document(company);
-           
-            for (int i = 0; i < 10; i++) {
-                   Element empleado=new Element("empleado");   
-                
-            empleado.addContent(new Element("nombre").setText(listaEmpleado.get(i).getNombre()));
-            empleado.addContent(new Element("Dreccion").setText(listaEmpleado.get(i).getDireccion()));
+            Document doc = new Document(company);
+
+            for (int i = 0; i < listaEmpleado.size(); i++) {
+                Element empleado = new Element("empleado");
+
+                empleado.addContent(new Element("nombre").setText(listaEmpleado.get(i).getNombre()));
+                empleado.addContent(new Element("Dreccion").setText(listaEmpleado.get(i).getDireccion()));
+                empleado.addContent(new Element("Edad").setText(String.valueOf(listaEmpleado.get(i).getEdad())));
+                empleado.addContent(new Element("Codigo").setText(listaEmpleado.get(i).getCodigoEmpleado()));
+                empleado.addContent(new Element("Departamento").setText(listaEmpleado.get(i).getDepartamento()));
+                doc.getRootElement().addContent(empleado);
             }
-       
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(doc, new FileWriter("company.xml"));
+            g = true;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            g = false;
         }
+        return g;
 
     }
-       
-    }
 
-
-
+}
